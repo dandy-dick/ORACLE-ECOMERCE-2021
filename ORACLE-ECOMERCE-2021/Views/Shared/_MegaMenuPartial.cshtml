@@ -1,0 +1,9 @@
+﻿@using Repository.DomainModels
+@model List<Category>
+
+@foreach (var item in Model)
+{
+   <li class="item">
+      <a href="/danh-muc/@item.URL" class="decoration0"> @item.NAME  </a>
+   </li>
+}

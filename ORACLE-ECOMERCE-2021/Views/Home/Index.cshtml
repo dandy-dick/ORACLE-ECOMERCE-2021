@@ -1,0 +1,229 @@
+﻿@using Repository.DomainModels
+
+@{  
+    var popularCategory = (List<Category>)ViewBag.PopularCategories;
+    }
+<!-- HOME INDEX-->
+<!-- TIM KIEM NỔI BẬT -->
+<div class="_bg-white box-ms-6 box-me-5 box-mt-3 p-3 rounded">
+   <div class="d-flex align-items-center border-bottom">
+      <h3 class="fs20 uppercase fw4 m-0 p-0"> Tìm kiếm nổi bật </h3>
+
+      <button _used-icon="1" class="ms-auto btn0 btn fs14"
+              onclick="swipers.hotSearch.slidePrev()">
+         <img src="~/assets/angle-left.svg" class="_icon" alt="">
+      </button>
+      <button _used-icon="1" class="btn0 btn fs14"
+              onclick="swipers.hotSearch.slideNext()">
+         <img src="~/assets/angle-left.svg" class="_icon flip-right" alt="">
+      </button>
+   </div>
+
+   <div id="hot-search-products" class="swiper-container">
+      <div class="swiper-wrapper" style="height:22.75rem!important;">
+         @foreach (var p in (List<Product>)ViewBag.HotSearchProducts)
+         {
+            <div class="swiper-slide p-14"  style="height:22.75rem!important;overflow:hidden">
+
+               <a href="@("/chi-tiet?product_id=" + p.ID)" class="decoration0" style="width:228px">
+                  <img src="@p.THUMBNAIL_URL" style="width:200px;height:200px;">
+                  <div class="pt-3 fs14 text-ellipses" style="width: 200px;">
+                     @p.NAME
+                  </div>
+                  <div class="d-flex align-items-center">
+                     @for (int i = 1; i <= 5; i++)
+                     {
+                        if (p.RATE_AVG - i >= 1)
+                        {
+                           <span _used-icon="1">
+                              <img src="~/assets/star.svg" class="_icon" alt="">
+                           </span>
+                        }
+                        else if (p.RATE_AVG - i > 0 && p.RATE_AVG - i < 1)
+                        {
+                           <span _used-icon="1">
+                              <img src="~/assets/star-half-alt.svg" class="_icon" alt="">
+                           </span>
+                        }
+                        else if (p.RATE_AVG - i <= 0)
+                        {
+                           <span _used-icon="1">
+                              <img src="~/assets/star faded.svg" class="_icon" alt="">
+                           </span>
+                        }
+                     }
+                  </div>
+                  <p class="fw16 fw5 mt-2 mb-0"> @(p.DISCOUNT < p.UNIT_PRICE && p.DISCOUNT > 0 ? p.DISCOUNT : p.UNIT_PRICE) đ</p>
+                  @if (p.DISCOUNT > 0)
+                  {
+               <del class="fs14 text-secondary">  @(p.DISCOUNT < p.UNIT_PRICE && p.DISCOUNT > 0 ? p.UNIT_PRICE : p.DISCOUNT) đ</del>
+                  }
+               </a>
+
+            </div>
+         }
+      </div>
+   </div>
+
+
+</div>
+
+<!-- SẢN PHẨM TRENDING -->
+<div class="_bg-white box-ms-6 box-me-5 box-mt-3 p-3 rounded">
+   <div class="d-flex align-items-center border-bottom">
+      <h3 class="fs20 uppercase fw4 m-0 p-0"> SẢN PHẨM TRENDING </h3>
+
+      <button _used-icon="1" class="ms-auto btn0 btn fs14"
+              onclick="swipers.trending.slidePrev()">
+         <img src="~/assets/angle-left.svg" class="_icon" alt="">
+      </button>
+      <button _used-icon="1" class="btn0 btn fs14"
+              onclick="swipers.trending.slideNext()">
+         <img src="~/assets/angle-left.svg" class="_icon flip-right" alt="">
+      </button>
+   </div>
+
+   <div id="trending-products"class="swiper-container">
+      <div class="swiper-wrapper" style="height:22.75rem!important;">
+         @foreach (var p in (List<Product>)ViewBag.TrendingProducts)
+         {
+            <div class="swiper-slide p-14" style="height:22.75rem!important;overflow:hidden">
+
+               <a href="@("/chi-tiet?product_id=" + p.ID)" class="decoration0" style="width:228px">
+                  <img src="@p.THUMBNAIL_URL" style="width:200px;height:200px;">
+                  <div class="pt-3 fs14 text-ellipses" style="width: 200px;">
+                     @p.NAME
+                  </div>
+                  <div class="d-flex align-items-center">
+                     @for (int i = 1; i <= 5; i++)
+                     {
+                        if (p.RATE_AVG - i >= 1)
+                        {
+                           <span _used-icon="1">
+                              <img src="~/assets/star.svg" class="_icon" alt="">
+                           </span>
+                        }
+                        else if (p.RATE_AVG - i > 0 && p.RATE_AVG - i < 1)
+                        {
+                           <span _used-icon="1">
+                              <img src="~/assets/star-half-alt.svg" class="_icon" alt="">
+                           </span>
+                        }
+                        else if (p.RATE_AVG - i <= 0)
+                        {
+                           <span _used-icon="1">
+                              <img src="~/assets/star faded.svg" class="_icon" alt="">
+                           </span>
+                        }
+                     }
+                  </div>
+                  <p class="fw16 fw5 mt-2 mb-0"> @(p.DISCOUNT < p.UNIT_PRICE && p.DISCOUNT > 0 ? p.DISCOUNT : p.UNIT_PRICE) đ</p>
+                  @if (p.DISCOUNT > 0)
+                  {
+                     <del class="fs14 text-secondary">  @(p.DISCOUNT < p.UNIT_PRICE && p.DISCOUNT > 0 ? p.UNIT_PRICE : p.DISCOUNT) đ</del>
+                  }
+               </a>
+
+            </div>
+         }
+      </div>
+   </div>
+
+
+</div>
+
+<!-- DANH MỤC NỔI BẬT -->
+<div class="_bg-white box-mx-5 box-mt-3 p-3 rounded">
+   <div class="d-flex align-items-center border-bottom ">
+      <h3 class="fs20 uppercase fw4 m-0 p-0"> Danh mục nổi bật </h3>
+      <button _used-icon="1" class="ms-auto btn0 btn fs14"
+              onclick="swipers.categoryProduct.slidePrev()">
+         <img src="~/assets/angle-left.svg" class="_icon" alt="">
+      </button>
+      <button _used-icon="1" class="btn0 btn fs14"
+              onclick="swipers.categoryProduct.slideNext()">
+         <img src="~/assets/angle-left.svg" class="_icon flip-right" alt="">
+      </button>
+   </div>
+
+   <div id="category-filter" class="d-flex align-items-center flex-wrap border-bottom">
+      @foreach (var c in (List<Category>)ViewBag.PopularCategories)
+      {
+         <button id="@c.ID" class="btn clickable filter-item m-2 me-2"
+               onclick="selectCategory(this)" url="@c.URL">@c.NAME</button>
+      }
+   </div>
+
+   <div id="popular-category-products" >
+
+      @await Component.InvokeAsync("ProductGrid", new {
+    categoryId = ((List<Category>)ViewBag.PopularCategories)[0].ID
+ })
+
+
+      <div class="d-flex flex-center border-top pt-3">
+         <a id="category-link" href="/danh-muc/@popularCategory[0].URL" class="decoration0 btn btn-lg rounded-0"> Xem thêm </a>
+      </div>
+   </div>
+   
+</div>
+
+@section Scripts {
+
+   <script>
+      // DEFINE FUNCTIONS
+      //
+      function updatePopularCategoryProduct(data) {
+         $('#popular-category-products').html(data);
+
+         var selectedFilter = $('#category-filter .filter-item.active');
+         $(`#popular-category-products #category-link`)
+            .attr('href', '/shop/index?' + $(selectedFilter).attr('url'));
+
+         swipers.categoryProduct = new Swiper('#popular-category-products .swiper-container', {
+            direction: 'horizontal',
+            slidesPerView: 1,
+         });
+
+         $('#popular-category-products').append(`
+         <div class="d-flex flex-center border-top pt-3">
+            <a id="category-link" href="/danh-muc/${$(selectedFilter).attr('url')}" class="decoration0 btn btn-lg rounded-0"> Xem thêm </a>
+         </div>`);
+      }
+
+      function selectCategory(el) {
+         var categoryId = $(el).attr('id');
+         if (categoryId) {
+            $.post('/Home/PopularCategoryProducts', { categoryId: categoryId }, function (data) {
+               toggleActive(el, '#category-filter');
+               updatePopularCategoryProduct(data);
+            });
+         }
+      }
+   </script>
+
+   <script>
+      // EXECUTE ALL
+      // 
+
+      // Init all swipers
+      //
+      var swipers = {};
+      swipers.hotSearch = new Swiper('#hot-search-products.swiper-container', {
+         direction: 'horizontal',
+         slidesPerView: 5,
+      });
+      swipers.trending = new Swiper('#trending-products.swiper-container', {
+         direction: 'horizontal',
+         slidesPerView: 5,
+      });
+
+      swipers.categoryProduct = new Swiper('#popular-category-products .swiper-container', {
+         direction: 'horizontal',
+         slidesPerView: 1,
+      });
+         // select first popular category
+         //
+         toggleActive('#category-filter .filter-item:first-of-type', '#category-filter');
+   </script>
+} 

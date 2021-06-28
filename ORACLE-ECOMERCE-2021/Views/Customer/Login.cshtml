@@ -1,0 +1,78 @@
+﻿@model LoginModel
+@using ORACLE_ECOMERCE_2021.Controllers;
+@using Microsoft.AspNetCore.Mvc.ModelBinding;
+
+@{
+   Dictionary<string, ModelStateError> errors = ViewBag.ModelStateErrorDictionary;
+   LoginModel loginModel = ViewBag.LoginModel ?? new LoginModel();
+}
+
+<div style="margin:3rem;">
+   <h3 class="small_heading text_center" style="margin-bottom: 2rem">
+      Đăng nhập
+   </h3>
+
+   <div class="flex_center justify_content_center">
+      <div style="transform: scale(0.9);">
+         <form class="form_1" action="/login" method="post" style="width:600px;">
+            @if (errors.ContainsKey("Summary"))
+            {
+               <div class="validation_summary text_center" style="color:red;">
+                  @errors["Summary"].ErrorMessages
+               </div>
+            }
+
+            <div class="form_field">
+               <label asp-for="UserName"></label>
+               <input type="text" class="primary_input" name="UserName"
+                      value="@loginModel.UserName"
+                      autocomplete="off">
+               @if (errors.ContainsKey("UserName") && errors["UserName"].State == "invalid")
+               {
+                  <div class="validation invalid">
+                     <img src="~/icons/warning.svg" alt="" class="small_icon">
+                     <span class="text_danger">
+                        @errors["UserName"].ErrorMessages
+                     </span>
+                  </div>
+               }
+            </div>
+
+            <div class="form_field">
+
+               <label asp-for="Password"></label>
+               <input type="password" class="primary_input" name="Password"
+                      value="@loginModel.Password">
+
+               @if (errors.ContainsKey("Password") && errors["Password"].State == "invalid")
+               {
+                  <div class="validation invalid">
+                     <img src="~/icons/warning.svg" alt="" class="small_icon">
+                     <span class="text_danger">
+                        @errors["Password"].ErrorMessages
+                     </span>
+                  </div>
+               }
+            </div>
+
+            <div class="form_field">
+               <div>
+                  <label asp-for="RememberMe"></label>
+                  <input type="checkbox" style="margin-left: 1rem;transform: scale(1.5);"
+                         name="RememberMe" value="@( new LoginModel().RememberMe ? "true":"false" )"
+                         @( new LoginModel().RememberMe ? "checked" : "" )>
+               </div>
+            </div>
+
+            <button type="submit" class="small_btn clickable"> Đăng nhập </button>
+            <div style="text-align: center;">
+               Chưa có tài khoản?
+               <a class="faded_link" href="/register"> Đăng ký ngay </a>
+            </div>
+         </form>
+      </div>
+   </div>
+
+</div>
+
+

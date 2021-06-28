@@ -1,0 +1,58 @@
+﻿@model ORACLE_ECOMERCE_2021.Models.PaginationPartial
+
+<div id="pagination" class=" _bg-white rounded mt-3 d-flex flex-center p-3 mb-5">
+   <button class="btn fs14 mx-3" href="" _used-icon="0.7"
+           onclick="PAGINATION.loadPrevPages()">
+      <img src="~/assets/angle-left.svg" class="_icon">
+   </button>
+   <div class="items"></div>
+   <button class="btn fs14 mx-3" _used-icon="0.7"
+           onclick="PAGINATION.loadNextPages()">
+      <img src="~/assets/angle-left.svg" class="_icon flip-right">
+   </button>
+</div>
+
+
+<script>
+   const PAGINATION = {
+      container: '#pagination',
+      currentPage: @(Model.CurrentPage),
+      totalPage: @(Model.TotalPage),
+      pageOffset: 5,
+      currentOffset: null,
+      init: function () {
+         this.currentOffset
+            = this.pageOffset * (Math.ceil(this.currentPage / this.pageOffset) - 1);
+
+         if (this.currentOffset < 0)
+            this.currentOffset = 0;
+
+         this.updatePagination();
+      },
+      updatePagination: function () {
+         var str = "",
+            start = this.currentOffset + 1,
+            end = this.currentOffset + this.pageOffset;
+         for (var i = start; i <= end && i <= this.totalPage; i++) {
+            var isActive = (this.currentPage == i) ? "text-primary fw5" : "";
+            str += `<button class="btn uppercase decoration0 mx-3 ${isActive}"
+                        onclick="extendQuery('currentPage', ${i})" value="${i}"> ${i} </button>`;
+         }
+
+         $(this.container + ' .items').html(str);
+      },
+      loadPrevPages: function () {
+         if (this.currentOffset - this.pageOffset < 0)
+            return;
+         this.currentOffset -= this.pageOffset;
+         this.updatePagination();
+      },
+      loadNextPages: function () {
+         if (this.currentOffset >= this.totalPage - this.pageOffset)
+            return;
+         this.currentOffset += this.pageOffset;
+         this.updatePagination();
+      }
+   }
+   PAGINATION.init();
+</script>

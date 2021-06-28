@@ -1,0 +1,197 @@
+﻿@using Repository.DomainModels
+@using System.Linq; 
+@inject Microsoft.AspNetCore.Identity.SignInManager<Customer> signInManager;
+@inject Microsoft.AspNetCore.Identity.UserManager<Customer> userManager;
+
+
+<DOCTYPE html>
+   <html lang="en">
+
+   <head>
+      <meta charset="UTF-8">
+      <meta http-equiv="X-UA-Compatible" content="IE=edge">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <title> Cửa hàng điện tử </title>
+
+      <link rel="stylesheet" href="~/libs/bootstrap-5/bootstrap.min.css">
+      <link rel="stylesheet" href="~/libs/flickity/flickity.css">
+      <link rel="stylesheet" href="~/libs/swiper/swiper-bundle.min.css">
+      <link rel="stylesheet" href="~/styles/__theme.controls.css">
+      <link rel="stylesheet" href="~/styles/__theme.palette.css">
+      <link rel="stylesheet" href="~/styles/__theme.ultilities.css?@(DateTime.Now.ToString("yyyyMMddHHmmssffff"))">
+      <link rel="stylesheet" href="~/styles/__theme.uikits.css">
+      <link rel="stylesheet" href="~/style.css?@(DateTime.Now.ToString("yyyyMMddHHmmssffff"))">
+
+      <script src="~/libs/jquery3.6/jquery-3.6.0.min.js"></script>
+   </head>
+
+   <body>
+
+      <div class="d-flex align-items-center p-3 box-px-6 border-bottom _bg-1 _txt-white">
+
+
+         <a href="" class="decoration0 ms-3 fs16"> Giới thiệu </a>
+         <a href="" class="decoration0 ms-3 fs16"> Chính sách </a>
+         <a href="" class="decoration0 ms-3 me-auto fs16"> Liên hệ </a>
+
+         <form method="get" action="/search" id="search-bar">
+            <input type="text" name="searchText" placeholder="Nhập từ khóa ... ">
+            <button class="btn0 " _used-icon="1" type="submit">
+               <img src="~/assets/search.svg" class="_icon">
+            </button>
+         </form>
+
+      </div>
+
+      <div class="d-flex align-items-center p-3 box-px-6 border-bottom _bg-white">
+         <a href="/" class="decoration0">
+            <img src="~/assets/logo.png" alt="" style="height:3.5rem;">
+         </a>
+
+         <button class="btn0 btn m-0 ms-3" data-bs-toggle="offcanvas" data-bs-target="#mega-menu">
+            <span _used-icon="1.5" class="me-2">
+               <img src="~/assets/bars.svg" alt="" class="_icon">
+            </span>
+            <span class="fw5">Danh mục</span>
+         </button>
+
+         <a class="btn0 btn ms-auto decoration0" href="/gio-hang">
+            <span _used-icon="1.7" class="me-2">
+               <img src="~/assets/shopping-cart.svg" alt="" class="_icon">
+            </span>
+            <span>
+               Giỏ hàng
+            </span>
+            <span id="cart-counter" class="badge bg-danger fs10 ms-1 d-none"> </span>
+         </a>
+
+         <div class="btn0 btn ms-3">
+            <span _used-icon="1.4" class="me-2">
+               <img src="~/assets/user.svg" alt="" class="_icon">
+            </span>
+
+            @if (signInManager.IsSignedIn(User))
+            {
+               string customerId = userManager.GetUserId(User);
+               Customer customer = userManager.Users.FirstOrDefault(p => p.Id == customerId);
+
+               <span href=""> @customer.UserName </span>
+               <span class="mx-2">/</span>
+               <a href="/logout" class="decoration0"> Logout </a>
+            }
+            else
+            {
+               <a href="/register" class="decoration0"> Sign up </a>
+               <span class="mx-2">/</span>
+               <a href="/login" class="decoration0"> login </a>
+            }
+
+         </div>
+      </div>
+
+      <div id="mega-menu" class="offcanvas offcanvas-start">
+
+         <div id="parent-menu" class="border-end">
+
+            @{ var parents = (List<Category>)ViewBag.ParentCategories; }
+            @foreach (var item in parents)
+            {
+               <div id="menu-item-@item.ID" class="d-flex align-items-center border-bottom">
+                  <a href="/danh-muc/@item.URL" class="decoration0"> @item.NAME </a>
+                  <span class="ms-auto clickable" _used-icon="0.7" onclick="renderMegaMenu(@item.ID)">
+                     <img src="~/assets/angle-left.svg" class="_icon flip-right">
+                  </span>
+               </div>
+            }
+         </div>
+
+         <div id="child-menu">
+         </div>
+      </div> 
+
+      @RenderBody();
+
+      <script src="~/libs/flickity/flickity.pkgd.js"></script>
+      <script src="~/libs/bootstrap-5/popper.min.js"></script>
+      <script src="~/libs/bootstrap-5/bootstrap.min.js"></script>
+      <script src="~/libs/swiper/swiper-bundle.min.js"></script>
+      <script src="~/js/_helper.js?@(DateTime.Now.ToString("yyyyMMddHHmmssffff"))"></script>
+
+      <script>
+         // get cart from cookie
+         var CART = [];
+         var cookieVal = getCookie('shoppingCart');
+         if (cookieVal != null) {
+            var values = cookieVal.split(':');
+            var index = 0;
+            while (index < values.length) {
+               CART.push({
+                  productId: values[index],
+                  quantity: +values[index + 1]
+               });
+
+               index += 2;
+            }
+
+            setCartCounter();
+         }
+
+         function setCartCounter() {
+            var val = CART.reduce((total, p) => total + (+p.quantity), 0);
+
+            if (val != null && val > 0) {
+               $('#cart-counter').removeClass('d-none');
+               $('#cart-counter').html(val);
+            }
+            else {
+               $('#cart-counter').addClass('d-none');
+            }
+         }
+
+         function updateCartItem(_productId, _action, _quantity) {
+            var item = CART.find(p => p.productId == _productId);
+            if (item) {
+               switch (_action) {
+                  case 'remove':
+                     CART = CART.filter(p => p.productId != _productId);
+                     break;
+                  case 'modify':
+                     item.quantity = _quantity;
+                     break;
+                  case 'add':
+                     item.quantity = +item.quantity + _quantity;
+                     break;
+                  default:
+                     break;
+               }
+            }
+            else {
+               CART.push({ productId: _productId, quantity: _quantity });
+            }
+
+            setCartCounter();
+
+            var cookie = "";
+            for (var i = 0; i < CART.length; i++) {
+               cookie += `${CART[i].productId}:${CART[i].quantity}`;
+               if (i < CART.length - 1)
+                  cookie += ":";
+            }
+            setCookie('shoppingCart', cookie);
+         }
+
+      </script>
+      <script>
+         function renderMegaMenu(parent_id) {
+            $.post('/Home/MegaMenu', { parent_id }, (html) => $('#child-menu').html(html));
+            toggleActive($(`#menu-item-${parent_id}`), '#parent-menu');
+         }
+
+         renderMegaMenu(@parents.First().ID);
+
+      </script>
+
+      @RenderSection("Scripts", false);
+
+   </body>
+</html>

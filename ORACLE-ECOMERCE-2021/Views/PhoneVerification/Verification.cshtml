@@ -1,0 +1,29 @@
+﻿@using ORACLE_ECOMERCE_2021.Controllers;
+@using ORACLE_ECOMERCE_2021.Models.Authy;
+@{ TokenVerificationModel tokenModel = Model ?? new TokenVerificationModel(); }
+@{ Dictionary<string, ModelStateError> errors = ViewBag.ModelErrors; }
+<form action="/verification/verify" method="post"
+      class="flex_col_center justify_content_center" style="width:100%;padding:6rem 25%;box-sizing:border-box">
+
+   <h3 class="small_heading text_center" style="font-weight: 500;font-size:3rem;margin: 2rem;">
+      Nhập mã xác thực
+   </h3>
+
+   @if (errors != null && errors.ContainsKey("Summary"))
+   {
+      <div class="text_center" style="color:red;"> @errors["Summary"].ErrorMessages </div>
+   }
+
+<div class="flex_center">
+   <input class="primary_input" type="text" name="Token"
+          value="@tokenModel.Token"
+          placeholder="Mã xác thực là ... "
+          style="margin: 2rem 2rem;" />
+
+   <button class="small_btn">
+      Xác thực
+   </button>
+</div>
+
+</form>
+

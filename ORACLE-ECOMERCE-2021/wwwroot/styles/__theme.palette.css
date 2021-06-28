@@ -1,0 +1,37 @@
+._txt-white { color: white!important;}
+  ._txt-black { color: black!important;}
+  ._bg-white { background-color: white!important;}
+  ._bg-black { background-color: black!important;}
+
+    :root {
+      
+        --primary-1: #3daef0;
+        --secondary-1: #616161;
+        --bg-1: #3daef0;
+        --bg-secondary-1: #f5f5f5;
+        --h2l2-1: #3daef0;
+
+        --primary-2: #fdfdfd;
+        --secondary-2: #828282;
+        --bg-2: #2e3134;
+        --bg-secondary-2: #4d4d4d;
+        --h2l2-2: #39e2a1;
+    }
+
+    
+    ._txt-inherit { color: inherit!important;}  
+    
+    ._txt-secondary-1 { color: var(--secondary-1)!important;}  
+    ._bg-1 { background-color: var(--bg-1)!important;}  
+    ._bg-secondary-1 { background-color: var(--bg-secondary-1)!important;}  
+    ._txt-h2l2-1 { color: var(--h2l2-1)!important;} 
+    ._bg-h2l2-1 { background-color: var(--h2l2-1)!important;}
+    ._border-h2l2-1 { border-color: var(--h2l2-1)!important;}
+    
+    ._txt-primary-2 { color: var(--primary-2)!important;}  
+    ._txt-secondary-2 { color: var(--secondary-2)!important;}  
+    ._bg-2 { background-color: var(--bg-2)!important;}  
+    ._bg-secondary-2 { background-color: var(--bg-secondary-2)!important;}  
+    ._txt-h2l2-2 { color: var(--h2l2-2)!important;} 
+    ._bg-h2l2-2 { background-color: var(--h2l2-2)!important;} 
+    

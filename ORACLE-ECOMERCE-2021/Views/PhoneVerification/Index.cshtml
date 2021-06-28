@@ -1,0 +1,25 @@
+﻿@model ORACLE_ECOMERCE_2021.Models.Authy.PhoneVerificationRequestModel
+
+<form id="dandy_dick" action="/verification/start" method="post" style="display:none">
+   <input type="text" name="CountryCode" value="@Model.CountryCode" />
+   <input type="text" name="PhoneNumber" value="@Model.PhoneNumber" />
+</form>
+
+<div class="flex_col_center justify_content_center" style="width:100%;padding:6rem 25%;box-sizing:border-box">
+
+   <h3 class="small_heading text_center" style="font-weight: 500;font-size:3rem">
+      Vui lòng xác thực số điện thoại
+   </h3>
+
+   <p class="text_center" style="margin: 2rem 0">
+      Để hoàn tất đăng ký, bạn cần phải xác thực số điện thoại của mình.<br />
+      Cụ thể, hệ thống sẽ gửi mã xác thực vào số điện thoại - @Model.PhoneNumber.<br />
+      Nhấn nút bên dưới để nhận mã xác thực!!
+   </p>
+
+   <button class="small_btn"
+           onclick="$('#dandy_dick').submit()">
+      Bắt đầu
+   </button>
+
+</div>

@@ -1,0 +1,131 @@
+﻿@model RegisterModel
+@using ORACLE_ECOMERCE_2021.Controllers;
+@using Microsoft.AspNetCore.Mvc.ModelBinding;
+
+@{
+    Dictionary<string, ModelStateError> errors = ViewBag.ModelStateErrorDictionary;
+    RegisterModel registerModel = ViewBag.RegisterModel ?? new RegisterModel();
+}
+
+<div style="margin:3rem">
+   <h3 class="small_heading text_center" style="margin-bottom: 2rem">
+      Đăng ký tài khoản
+   </h3>
+
+   <div class="flex_center justify_content_center">
+      <div style="transform: scale(0.9);">
+         <form class="form_1" action="/register" method="post">
+            @if (errors.ContainsKey("Summary"))
+            {
+               <div class="validation_summary text_center" style="color:red;">
+                  @errors["Summary"].ErrorMessages
+               </div>
+            }
+
+            <div class="flex_center">
+               <div class="form_field"
+                    style="margin-right: 1rem;box-sizing: border-box;width: 50%;">
+                  <label asp-for="FullName"></label>
+                  <input type="text" class="primary_input" name="FullName"
+                         value="@registerModel.FullName"
+                         autocomplete="off">
+                  @if (errors.ContainsKey("FullName") && errors["FullName"].State == "invalid")
+                  {
+                     <div class="validation invalid">
+                        <img src="~/icons/warning.svg" alt="" class="small_icon">
+                        <span class="text_danger">
+                           @errors["FullName"].ErrorMessages
+                        </span>
+                     </div>
+                  }
+               </div>
+
+               <div class="form_field">
+                  <label asp-for="PhoneNumber"></label>
+                  <input type="text" class="primary_input" name="PhoneNumber"
+                         value="@registerModel.PhoneNumber"
+                         autocomplete="off">
+                  @if (errors.ContainsKey("PhoneNumber") && errors["PhoneNumber"].State == "invalid")
+                  {
+                     <div class="validation invalid">
+                        <img src="~/icons/warning.svg" alt="" class="small_icon">
+                        <span class="text_danger">
+                           @errors["PhoneNumber"].ErrorMessages
+                        </span>
+                     </div>
+                  }
+               </div>
+            </div>
+
+            <div class="form_field">
+               <label asp-for="UserName"></label>
+               <input type="text" class="primary_input" name="UserName"
+                      value="@registerModel.UserName"
+                      autocomplete="off">
+               @if (errors.ContainsKey("UserName") && errors["UserName"].State == "invalid")
+               {
+                  <div class="validation invalid">
+                     <img src="~/icons/warning.svg" alt="" class="small_icon">
+                     <span class="text_danger">
+                        @errors["UserName"].ErrorMessages
+                     </span>
+                  </div>
+               }
+            </div>
+
+            <div class="flex_center">
+               <div class="form_field" style="margin-right: 1rem;box-sizing: border-box;width: 50%;">
+
+                  <label asp-for="Password"></label>
+                  <input type="password" class="primary_input" name="Password"
+                         value="@registerModel.Password">
+
+                  @if (errors.ContainsKey("Password") && errors["Password"].State == "invalid")
+                  {
+                     <div class="validation invalid">
+                        <img src="~/icons/warning.svg" alt="" class="small_icon">
+                        <span class="text_danger">
+                           @errors["Password"].ErrorMessages
+                        </span>
+                     </div>
+                  }
+               </div>
+
+               <div class="form_field">
+                  <label asp-for="ConfirmPassword"></label>
+                  <input type="password" class="primary_input" name="ConfirmPassword"
+                         value="@registerModel.ConfirmPassword">
+
+                  @if (errors.ContainsKey("ConfirmPassword") && errors["ConfirmPassword"].State == "invalid")
+                  {
+                     <div class="validation invalid">
+                        <img src="~/icons/warning.svg" alt="" class="small_icon">
+                        <span class="text_danger">
+                           @errors["ConfirmPassword"].ErrorMessages
+                        </span>
+                     </div>
+                  }
+               </div>
+            </div>
+
+            <div class="form_field">
+               <div>
+                  <label asp-for="RememberMe"></label>
+                  <input type="checkbox" style="margin-left: 1rem;transform: scale(1.5);"
+                         name="RememberMe" value="@( new RegisterModel().RememberMe ? "true":"false" )"
+                         @( new RegisterModel().RememberMe ? "checked":"" )>
+               </div>
+            </div>
+
+            <button type="submit" class="small_btn clickable"> Đăng ký </button>
+            <div style="text-align: center;">
+               Bạn đã có tài khoản?
+               <a class="faded_link" href="/login"> Đăng nhập </a>
+            </div>
+         </form>
+      </div>
+   </div>
+
+</div>
+
+

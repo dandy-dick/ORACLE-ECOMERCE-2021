@@ -1,0 +1,59 @@
+﻿@using Repository.DomainModels
+@model List<Product>
+
+
+<div class="swiper-container" style="overflow:hidden">
+   <div class="swiper-wrapper" style="height:auto;width:">
+
+      @{ var products = Model; }
+      @{ int j = 1; }
+      @while (j < products.Count)
+      {
+         <div class="swiper-slide">
+            <div class="d-flex flex-wrap">
+               @{ int temp = j; } 
+               @for (int i = j; i < temp + 10 && i < products.Count ; i++)
+               {
+                  <a href="@("/chi-tiet?product_id=" + products[i].ID)" class="decoration0 p-14" style="width:228px">
+                     <img src="@products[i].THUMBNAIL_URL" style="width:200px;height:200px;">
+                     <div class="pt-3 fs14 text-ellipses" style="width: 200px;">
+                        @products[i].NAME
+                     </div>
+                     <div class="d-flex align-items-center">
+
+                        @for (int k = 1; k <= 5; k++)
+                        {
+                           if (products[i].RATE_AVG - k >= 1)
+                           {
+                              <span _used-icon="1">
+                                 <img src="~/assets/star.svg" class="_icon" alt="">
+                              </span>
+                           }
+                           else if (products[i].RATE_AVG - k > 0 && products[i].RATE_AVG - k < 1)
+                           {
+                              <span _used-icon="1">
+                                 <img src="~/assets/star-half-alt.svg" class="_icon" alt="">
+                              </span>
+                           }
+                           else if (products[i].RATE_AVG - k <= 0)
+                           {
+                              <span _used-icon="1">
+                                 <img src="~/assets/star faded.svg" class="_icon" alt="">
+                              </span>
+                           }
+                        }
+                     </div>
+                     <p class="fw16 fw5 mt-2 mb-0"> @(products[i].DISCOUNT > 0 ? products[i].DISCOUNT : products[i].UNIT_PRICE) đ</p>
+                     @if (products[i].DISCOUNT > 0)
+                     {
+                        <del class="fs14 text-secondary"> @products[i].UNIT_PRICE đ</del>
+                     }
+                  </a>
+
+                  j += 1;
+               }
+            </div>
+         </div>
+      }
+   </div>
+</div>

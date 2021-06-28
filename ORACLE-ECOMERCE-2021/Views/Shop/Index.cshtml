@@ -1,0 +1,129 @@
+﻿<!-- SHOP INDEX-->
+@using Repository.DomainModels
+@using ORACLE_ECOMERCE_2021.Models
+@using ORACLE_ECOMERCE_2021.Controllers
+@using System.Linq
+
+
+@{ 
+    var options = (RankProductOptions)ViewBag.Options;
+    var categories = (List<Category>)ViewBag.Categories;
+}
+<div class="d-flex">
+   <!-- #FILTER SECTION -->
+   <form id="shoplist-filter" method="get" action=""
+         class="rounded pt-3 box-m-2 _bg-white" style="width:350px;">
+
+      <div class="d-flex align-items-center mx-3 py-2 border-bottom">
+         <p class="m-0 uppercase fw5">Mức giá</p>
+         <button class="fs12 ms-auto btn btn-sm btn-outline-secondary"
+                 onclick="$('#shoplist-filter').submit()">
+            Áp dụng
+         </button>
+      </div>
+
+      <div class="d-flex py-3 mx-3">
+         <input type="number" min="0" name="minPrice" class="fs14 p-1" style="width:100px"
+                value="@Html.Raw(options.minPrice != null ? options.minPrice.ToString() : "")">
+         <span class="mx-2 fs24"> - </span>
+         <input type="number" min="0" name="maxPrice" class="fs14 p-1" style="width:100px"
+                value="@Html.Raw(options.minPrice != null ? options.maxPrice.ToString() : "")">
+      </div>
+
+      <div class="d-flex align-items-center mx-3 py-2 mt-3 border-bottom">
+         <p class="m-0 uppercase fw5">thương hiệu</p>
+         <button class="fs12 ms-auto btn btn-sm btn-outline-secondary"
+                 onclick="$('#shoplist-filter').submit()">
+            Áp dụng
+         </button>
+      </div>
+
+      <div class="mx-3 py-3">
+         @if(ViewBag.PopularBrands != null)
+         foreach (var brand in (List<Brand>)ViewBag.PopularBrands)
+         {
+            var isCheck = options.brandIds.Contains(brand.ID);
+
+            <div class="btn d-flex align-items-center" type="submit">
+               <input id="brand-@brand.ID" type="checkbox" name="brandIds" value="@brand.ID"
+                      @Html.Raw(isCheck == true ? "checked" : "")>
+               <label for="brand-@brand.ID" class="ms-3 fs18"> @brand.NAME </label>
+            </div>
+         }
+
+      </div>
+
+   </form>
+
+
+
+
+   <div class="box-mt-2 box-me-2 rounded w-100">
+
+      @{
+         List<Category> breadcrumbs = new List<Category> { (Category)ViewBag.Category };
+         var current = (Category)ViewBag.Category;
+         while (current != null && current.PARENT_ID != 0)
+         {
+            var next = categories.FirstOrDefault(p => p.ID == current.PARENT_ID);
+            breadcrumbs.Insert(0, next);
+            current = next;
+         }
+
+      }
+      <div id="breadcrumbs" class="_bg-white rounded d-flex align-items-center p-3 mb-3">
+         @foreach (var item in breadcrumbs)
+         {
+            <a href="/danh-muc/@item.URL" class="breadcrumb-item uppercase decoration0"> @item.NAME  </a>
+         }
+      </div>
+
+
+      <div id="sort-options" class="d-flex align-items-center flex-wrap border-bottom box-mb-1">
+         <button class="btn clickable filter-item m-2 me-2 "
+                 method="rank_product_popular"
+                 onclick="extendQuery('method', 'rank_product_popular')">
+            Phổ biến nhất
+         </button>
+
+         <button class="btn clickable filter-item m-2 me-2"
+                 method="rank_product_newest"
+                 onclick="extendQuery('method', 'rank_product_newest')">
+            Mới nhất
+         </button>
+
+         <button class="btn clickable filter-item m-2 me-2"
+                 method="rank_product_bestseller"
+                 onclick="extendQuery('method', 'rank_product_bestseller')">
+            Best Seller
+         </button>
+      </div>
+
+      <!-- #PRODUCTS-->
+      <div id="shop-list" class="d-flex flex-wrap align-items-start py-3 ps-2 _bg-white rounded "
+           style="min-height:20rem;max-height:180rem;overflow: hidden;">
+
+         @await Component.InvokeAsync("ProductList", ViewBag.Products)
+
+         @if (ViewBag.Products == null || ViewBag.Products.Count == 0)
+         {
+            <div class="ms-auto flex-1"> <h3 class="fw4 text-center"> Hiện chưa có sản phẩm phù hợp </h3></div>
+         }
+      </div>
+
+      <!-- #PAGINATION -->
+      @await Html.PartialAsync("_Pagination", new PaginationPartial
+       {
+         CurrentPage = ViewBag.CurrentPage,
+         TotalPage = ViewBag.TotalPage
+       })
+   </div>
+
+</div>
+
+@section Scripts
+{
+   <script>
+      toggleActive('#sort-options .filter-item[method="@options.method"]', '#sort-options');
+   </script>
+}

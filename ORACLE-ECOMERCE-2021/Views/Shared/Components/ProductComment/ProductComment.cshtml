@@ -1,0 +1,15 @@
+﻿@using Repository.DomainModels;
+@model List<Review>
+
+@if(Model != null)
+foreach (var item in Model)
+{
+   <div class="product-comment mb-4">
+      <span class="fw5 fs18 mb-2"> @item.AUTHOR </span>
+      <span class="ms-3 text-muted"> Đánh giá: <b> @item.RATE sao</b></span>
+      <p class="bg-light p-3 mt-2 fw3"> @(item.COMMENTED??"") </p>
+   </div>
+}
+
+
+

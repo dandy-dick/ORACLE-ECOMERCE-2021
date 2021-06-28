@@ -1,0 +1,295 @@
+
+.shop_list_pagination {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+}
+
+.shop_list_pagination {
+    margin-left: auto;
+}
+
+    .shop_list_pagination .pagination_item {
+        margin-left: 2rem;
+    }
+
+.pagination_item .text_radio_btn .text {
+    font-size: 0.95rem;
+    font-family: sans-serif;
+    font-weight: 600;
+    line-height: 100%;
+}
+
+.pagination_item:hover .text_radio_btn .text,
+.pagination_item.active .text_radio_btn .text {
+    color: #9143ff;
+}
+
+
+
+    .text_radio_btn input {
+        display: none;
+    }
+
+
+#sorting_section .selected {
+    font-weight: 500;
+    font-size: 0.9rem;
+    margin-right: 1rem;
+}
+
+#sorting_section {
+    display: flex;
+    align-items: flex-start;
+    justify-content: flex-start;
+    margin-bottom: -1rem;
+}
+
+    #sorting_section .label {
+        opacity: 0.65;
+        font-weight: 500;
+        font-size: 0.9rem;
+        padding: 1rem;
+    }
+
+        #sorting_section .label:first-of-type {
+            padding-left: 0;
+        }
+
+    #sorting_section .sort {
+        position: relative;
+    }
+
+        #sorting_section .sort:hover {
+            transition: background-color 0.2s;
+            background-color: rgba(255, 255, 255, 0.726);
+        }
+
+        #sorting_section .sort.active {
+            background-color: rgba(255, 255, 255, 0.726);
+        }
+
+    #sorting_section .sort_control {
+        padding: 1rem;
+    }
+
+    #sorting_section .sort_options {
+        border-top: solid 1px rgba(71, 71, 71, 0.192);
+        flex-direction: column;
+        position: absolute;
+        z-index: 99;
+        top: 100%;
+        width: 100%;
+        height: 0;
+        overflow: hidden;
+        display: flex;
+        opacity: 0;
+    }
+
+    #sorting_section .sort.active .sort_options {
+        background-color: rgba(255, 255, 255, 0.726);
+        height: unset;
+        transition: opacity 0.3s;
+        opacity: 1;
+    }
+
+    #sorting_section .sort_options .option {
+        padding: 1rem;
+    }
+
+        #sorting_section .sort_options .option:hover {
+            color: black;
+            background-color: rgba(71, 71, 71, 0.075);
+        }
+
+.fixed_icon_btn {
+    display: flex;
+    align-items: center;
+}
+
+
+#breadcrum_section {
+    width: 30%;
+    position: relative;
+}
+
+    #breadcrum_section .breadcrum {
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        margin-bottom: -1.5rem;
+    }
+
+    #breadcrum_section .title {
+        font-weight: 500;
+        font-size: 2.35rem;
+        color: rgb(71, 71, 71);
+    }
+
+
+
+    #breadcrum_section .breadcrum_item {
+        text-decoration: none;
+        opacity: 0.9;
+        font-weight: 400;
+        font-size: 0.9rem;
+        margin-right: 1rem;
+    }
+
+#main_section .bottom_section {
+    display: flex;
+}
+
+    #main_section .bottom_section #filter_section {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    #main_section .bottom_section .bottom_left_section {
+        width: 30%;
+    }
+
+    #main_section .bottom_section .bottom_right_section {
+        width: 70%;
+    }
+
+#filter_section .filter_title {
+    font-weight: 500;
+    font-size: 0.9rem;
+    opacity: 0.6;
+    margin-top: 2rem;
+    margin-bottom: 1rem;
+}
+
+#filter_section .filter_item {
+    opacity: 0.6;
+    margin-bottom: 1rem;
+}
+
+    #filter_section .filter_item:hover {
+        opacity: 1;
+        font-weight: 500;
+        cursor: pointer;
+    }
+
+    #filter_section .filter_item.active {
+        opacity: 1;
+        font-weight: 500;
+        color: #9e59ff;
+    }
+
+#shop_list_section {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-start;
+    justify-content: flex-start;
+    margin-top: 2rem;
+}
+
+.shop_list_item {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 3rem;
+    width: 30%;
+    margin-right: 3%;
+}
+
+    .shop_list_item .product_control img.product_img {
+        width: 100%;
+        height: 20rem;
+        background-color: rgb(175, 175, 175);
+    }
+
+    .shop_list_item .product_price {
+        font-size: 0.85rem;
+        font-weight: 600;
+        margin-top: 1.3rem;
+        color: #f86b6b;
+    }
+
+
+    .shop_list_item .product_name {
+        font-weight: 600;
+        margin-top: 0.85rem;
+        text-decoration: none;
+    }
+
+        .shop_list_item .product_name:hover {
+            text-decoration: underline;
+        }
+
+    .shop_list_item .product_control {
+        display: flex;
+        flex-direction: column;
+        position: relative;
+        overflow: hidden;
+    }
+
+        .shop_list_item .product_control .controls {
+            position: absolute;
+            bottom: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+            transform: translateY(4rem);
+            transition: transform 0.4s, opacity 0.5s ease-in;
+            opacity: 0;
+        }
+
+        .shop_list_item .product_control:hover .controls {
+            transform: translateY(-2rem);
+            opacity: 1;
+        }
+
+.product_control .controls .control_item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    border: none;
+    background-color: transparent;
+    opacity: 0.7;
+}
+
+    .product_control .controls .control_item:hover {
+        opacity: 1;
+    }
+
+    .product_control .controls .control_item .icon {
+        background-color: rgb(71, 71, 71);
+        border-radius: 10rem;
+        padding: 0.8rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        box-shadow: 0px 0px 20px #878787;
+    }
+
+    .product_control .controls .control_item .text {
+        transform: translateY(2rem);
+        opacity: 0;
+        margin-top: 0.5rem;
+        transition: opacity 0.25s ease-out, transform 0.25s ease-out;
+    }
+
+    .product_control .controls .control_item:hover .icon {
+        box-shadow: 0px 0px 15px #878787;
+    }
+
+    .product_control .controls .control_item:hover .text {
+        cursor: pointer;
+        opacity: 1;
+        transform: translateY(0rem);
+    }
+
+.shop_list_item .product_control .controls .control_item[added-to-cart="true"] .icon {
+    background-color: #4ff07d;
+}
+
+.shop_list_item .product_control .controls .control_item[added-to-cart="true"]:hover .icon {
+    background-color: #F25F5C;
+}
+
+

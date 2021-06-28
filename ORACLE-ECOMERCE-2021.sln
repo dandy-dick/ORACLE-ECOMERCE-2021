@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.31229.75
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ORACLE-ECOMERCE-2021", "ORACLE-ECOMERCE-2021\ORACLE-ECOMERCE-2021.csproj", "{163C85D4-F1F9-4068-BDE9-58991B58F9C6}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Repository", "Repository\Repository.csproj", "{B4EB4B92-BB94-4ED0-A688-25FF71FB392D}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{163C85D4-F1F9-4068-BDE9-58991B58F9C6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{163C85D4-F1F9-4068-BDE9-58991B58F9C6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{163C85D4-F1F9-4068-BDE9-58991B58F9C6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{163C85D4-F1F9-4068-BDE9-58991B58F9C6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B4EB4B92-BB94-4ED0-A688-25FF71FB392D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B4EB4B92-BB94-4ED0-A688-25FF71FB392D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B4EB4B92-BB94-4ED0-A688-25FF71FB392D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B4EB4B92-BB94-4ED0-A688-25FF71FB392D}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {AD2D816A-6DB3-41F9-9D31-304AE62FC255}
+	EndGlobalSection
+EndGlobal

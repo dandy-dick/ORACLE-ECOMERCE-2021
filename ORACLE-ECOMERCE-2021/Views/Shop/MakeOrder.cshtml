@@ -1,0 +1,54 @@
+﻿@model List<CartItem>
+
+<div class="d-flex flex-center box-p-3">
+   <div class="_bg-white box-p-2 box-me-1">
+      <h4 class="uppercase mb-5"> Thông tin đơn hàng </h4>
+      <form action="/don-hang-thanh-cong" method="get" id="order-form">
+
+         <div class="d-flex mb-3">
+            <div class="me-3">
+               <label class="mb-2 fw5"> Họ và tên</label>
+               <input class="form-control" type="text" name="receiverName">
+            </div>
+            <div class="me-3">
+               <label class="mb-2 fw5"> Số điện thoại</label>
+               <input class="form-control" type="text" name="phoneNumber">
+            </div>
+         </div>
+
+         <div class="me-3 mb-3">
+            <label class="mb-2 fw5"> Email</label>
+            <input class="form-control" type="text" style="width:250px" name="email">
+         </div>
+
+
+         <div class="me-3 mb-3">
+            <label class="mb-2 fw5"> Địa chỉ</label>
+            <input class="form-control" type="text" style="width: 430px;" name="address">
+         </div>
+
+         <div class="me-3">
+            <label class="mb-2 fw5"> Ghi chú</label>
+            <textarea class="form-control" name="description" id="" cols="30" rows="5" style="width: 430px;"></textarea>
+         </div>
+      </form>
+   </div>
+
+   <div class="_bg-white box-p-2 mb-auto">
+
+      <div class="d-flex mb-3">
+         <span class="fs20 fw5 "> Số lượng: </span>
+         <span class="fs20 ms-5 "> @Model.Sum(p => p.Quantity) </span>
+      </div>
+
+      <div class="d-flex mb-3">
+         <span class="fs20 fw5 "> Tổng: </span>
+         <span class="fs20 ms-5 "> @Model.Sum(p => p.Product.UNIT_PRICE - p.Product.DISCOUNT) đ</span>
+      </div>
+
+      <div class="mt-3 border-top">
+         <button onclick="$('#order-form').submit()" class="rounded-0 btn btn-primary mt-3 btn-lg w-100"> Đặt hàng </button>
+      </div>
+
+   </div>
+</div>

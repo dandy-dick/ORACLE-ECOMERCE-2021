@@ -1,0 +1,36 @@
+﻿@using Repository.DomainModels
+
+@{
+   var products = (List<Product>)ViewBag.SearchResult;
+}
+
+<!-- SEARCH RESLT-->
+<!-- DANH MỤC NỔI BẬT -->
+<div class="_bg-white box-mx-5 box-mt-3 p-3 rounded">
+   <div class="d-flex align-items-center border-bottom ">
+      <h3 class="fs20 uppercase fw4 m-0 p-0"> Kết quả tìm kiếm: @ViewBag.SearchText </h3>
+   </div>
+
+   <div class="box-mt-2 box-me-2 rounded w-100">
+
+      <!-- #PRODUCTS-->
+      <div id="shop-list" class="d-flex flex-wrap align-items-start py-3 ps-2 _bg-white rounded "
+           style="min-height:20rem;max-height:180rem;overflow: hidden;">
+
+         @await Component.InvokeAsync("ProductList", products)
+
+         @if (products == null || products.Count == 0)
+         {
+            <div class="ms-auto flex-1"> <h3 class="fw4 text-center"> Hiện chưa có sản phẩm phù hợp </h3></div>
+         }
+      </div>
+
+      <!-- #PAGINATION -->
+      @await Html.PartialAsync("_Pagination", new PaginationPartial
+       {
+          CurrentPage = ViewBag.CurrentPage,
+          TotalPage = (int)Math.Ceiling((float)ViewBag.SearchTotal / 30)
+       })
+   </div>
+
+</div>

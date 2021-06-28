@@ -1,0 +1,453 @@
+﻿@using Repository.DomainModels;
+@using Newtonsoft.Json;
+@using System.Collections.Generic  
+@using ORACLE_ECOMERCE_2021.Models.ActionModels;
+
+@{ 
+    Product product = ViewBag.Product;
+    var categories = (List<Category>)ViewBag.Categories;
+    List<RateSummary> rateSum = ViewBag.RateSummaries;
+}
+
+<!-- #Product Detail -->
+<div class="d-flex rounded box-m-2 _bg-white">
+
+   <div class="border-end d-flex flex-column align-items-center box-p-2" style="width:460px;">
+
+      <img id="thumbnail-img" src="@product.ProductImages[0].MEDIUM_URL" alt=""
+           style="width: 400px;height:400px;">
+
+      <div class="d-flex align-items-center mt-3 w-100">
+
+         @{
+            for (int i = 0; i < 4; i++)
+            {
+               if (i == product.ProductImages.Count)
+                   break;
+
+               <img class="mx-1 clickable" src="@product.ProductImages[i].SMALL_URL" alt=""
+                    style="width: 50px;height:50px;" onclick="selectImage(@i)">
+            }
+         }
+      </div>
+
+   </div>
+
+   <div class="flex-1 box-p-2">
+
+      @{
+          var current = ((List<Category>)ViewBag.Categories)
+              .FirstOrDefault(p => p.ID == product.CATEGORY_ID);
+          List<Category> breadcrumbs = new List<Category> { current };
+          while (current != null && current.PARENT_ID != 0)
+          {
+             var next = categories.FirstOrDefault(p => p.ID == current.PARENT_ID);
+             breadcrumbs.Insert(0, next);
+             current = next;
+          }
+      }
+      <div id="breadcrumbs" class="_bg-white rounded d-flex align-items-center px-3">
+         @foreach (var item in breadcrumbs)
+         {
+            <a href="/danh-muc/@item.URL" class="breadcrumb-item uppercase"> @item.NAME  </a>
+         }
+      </div>
+
+      <p class="fs20">@product.NAME</p>
+
+      <div class="d-flex align-items-center">
+         <span class="text-muted fs16"> Lượt xem: </span>
+         <span class="fs18 ms-2 me-2"> @product.VIEWS </span>
+
+         <span class="text-muted fs16"> Lượt xem gần đây: </span>
+         <span class="fs18 ms-2"> @product.VIEWS_RECENT </span>
+      </div>
+      <div class="d-flex align-items-center mt-2">
+
+         <span class="text-muted fs16"> Đã bán: </span>
+         <span class="fs18 ms-2"> @product.PURCHASES </span>
+
+         <span class="text-muted fs16 ms-3"> Đánh giá: </span>
+         <div class="d-flex align-items-center ms-2">
+            @for (int i = 1; i <= 5; i++)
+            {
+               if (product.RATE_AVG - i >= 1)
+               {
+                  <span _used-icon="1">
+                     <img src="~/assets/star.svg" class="_icon" alt="">
+                  </span>
+               }
+               else if (product.RATE_AVG - i > 0 && product.RATE_AVG - i < 1)
+               {
+                  <span _used-icon="1">
+                     <img src="~/assets/star-half-alt.svg" class="_icon" alt="">
+                  </span>
+               }
+               else if (product.RATE_AVG - i <= 0)
+               {
+                  <span _used-icon="1">
+                     <img src="~/assets/star faded.svg" class="_icon" alt="">
+                  </span>
+               }
+            }
+         </div>
+      </div>
+
+      <div class="mt-3">
+         <span class="text-muted fs16"> Thương hiệu: </span>
+         <a href="" class="text-primary decoration0 fs18 ms-2"> @product.Brand.NAME </a>
+      </div>
+
+      <div class="bg-light p-3 mt-3 d-inline-flex align-items-end">
+         <span class="fs24 fw5"> @(product.UNIT_PRICE - product.DISCOUNT) ₫ </span>
+         @if (product.DISCOUNT > 0)
+         {
+            <del class="fs16 ms-3 text-muted">  @product.UNIT_PRICE ₫ </del>
+         }
+      </div>
+
+      <div></div>
+
+      <div class="d-inline-flex border-bottom border-top py-2 my-3">
+
+         <input id="cart-input" type="number" class="text-center border" value="1" style="width: 75px;" min="1">
+
+         <button class="ms-3 btn rounded-0 btn-danger _txt-white" _used-icon="1.5"
+                 onclick="updateCartItem('@product.ID', 'add', +$('#cart-input').val()??1)">
+
+            <img src="~/assets/cart-plus.svg" class="_icon me-2" alt="">
+            Thêm vào giỏ
+         </button>
+
+      </div>
+
+      <p class="fw5 mb-1 w-75">
+         <b> Mô tả: </b>
+         <span class="text-muted fw4 ms-2">
+            ( Chưa có mô tả nào )
+         </span>
+      </p>
+   </div>
+</div>
+
+<!-- TRENDING -->
+<div class="p-3 _bg-white rounded box-m-2 box-p-2">
+   <div class="d-flex align-items-center mb-3 border-bottom ">
+      <h3 class="fs20 uppercase fw4 m-0 p-0"> sản phẩm tương tự </h3>
+      <button _used-icon="1" class="ms-auto btn0 btn fs14"
+              onclick="swipers.similarProduct.slidePrev()">
+         <img src="~/assets/angle-left.svg" class="_icon" alt="">
+      </button>
+      <button _used-icon="1" class="btn0 btn fs14"
+              onclick="swipers.similarProduct.slideNext()">
+         <img src="~/assets/angle-left.svg" class="_icon flip-right" alt="">
+      </button>
+   </div>
+   <div id="similar-products" class="swiper-container">
+      <div class="swiper-wrapper" style="height:22.75rem!important;">
+         @foreach (var p in (List<Product>)ViewBag.SimilarProducts)
+         {
+            <div class="swiper-slide p-14" style="height:22.75rem!important;overflow:hidden">
+
+               <a href="@("/chi-tiet?product_id=" + p.ID)" class="decoration0" style="width:228px">
+                  <img src="@p.THUMBNAIL_URL" style="width:200px;height:200px;">
+                  <div class="pt-3 fs14 text-ellipses" style="width: 200px;">
+                     @p.NAME
+                  </div>
+                  <div class="d-flex align-items-center">
+                     @for (int i = 1; i <= 5; i++)
+                     {
+                        if (p.RATE_AVG - i >= 1)
+                        {
+                           <span _used-icon="1">
+                              <img src="~/assets/star.svg" class="_icon" alt="">
+                           </span>
+                        }
+                        else if (p.RATE_AVG - i > 0 && p.RATE_AVG - i < 1)
+                        {
+                           <span _used-icon="1">
+                              <img src="~/assets/star-half-alt.svg" class="_icon" alt="">
+                           </span>
+                        }
+                        else if (p.RATE_AVG - i <= 0)
+                        {
+                           <span _used-icon="1">
+                              <img src="~/assets/star faded.svg" class="_icon" alt="">
+                           </span>
+                        }
+                     }
+                  </div>
+                  <p class="fw16 fw5 mt-2 mb-0"> @(p.DISCOUNT < p.UNIT_PRICE && p.DISCOUNT > 0 ? p.DISCOUNT : p.UNIT_PRICE) đ</p>
+                  @if (p.DISCOUNT > 0)
+                  {
+                     <del class="fs14 text-secondary">  @(p.DISCOUNT < p.UNIT_PRICE && p.DISCOUNT > 0 ? p.UNIT_PRICE : p.DISCOUNT) đ</del>
+                  }
+               </a>
+
+            </div>
+         }
+      </div>
+   </div>
+</div>
+
+<!-- Product Feafetures -->
+<div class="_bg-white rounded box-m-2 box-p-2 d-inline-block">
+
+   <h4 class="uppercase fs20 mb-5"> Thông tin chi tiết </h4>
+   <table style="width:700px">
+
+      @if (product.ProductFeatures == null || product.ProductFeatures.Count == 0)
+      {
+         <tr>
+            <th style="padding:0.5rem!important;"> Trống </th>
+            <td> Trống </td>
+         </tr>
+      }
+
+      @if (product.ProductFeatures != null)
+      foreach (var feature in product.ProductFeatures)
+      {
+         foreach (var attr in feature.Attributes)
+         {
+            <tr>
+               <th style="padding:0.5rem!important;"> @attr.NAME </th>
+               <td style="padding:0.5rem!important;"> @Html.Raw(attr.VALUE) </td>
+            </tr>
+         }
+      }
+   </table>
+
+</div>
+
+<!-- Product Reviews -->
+<div class="box-m-2 d-flex">
+
+   <!-- REVIEW SUMMARY -->
+   <div class="_bg-white rounded box-me-2 box-p-2">
+      <div class="d-flex align-items-center">
+         <span class="fs16" _used-icon="1.5">
+            <img src="~/assets/star.svg" class="_icon" alt="">
+            <img src="~/assets/star.svg" class="_icon" alt="">
+            <img src="~/assets/star.svg" class="_icon" alt="">
+            <img src="~/assets/star-half-alt.svg" class="_icon" alt="">
+            <img src="~/assets/star faded.svg" class="_icon" alt="">
+         </span>
+      </div>
+
+      <span class="d-block my-3 fs18 "> Tổng: @rateSum.Sum(p=>p.TOTAL) lượt</span>
+
+      <div class="d-flex mt-3">
+         <div class="d-flex align-items-center">
+            <span class="fs16" _used-icon="1">
+               <img src="~/assets/star.svg" class="_icon" alt="">
+               <img src="~/assets/star.svg" class="_icon" alt="">
+               <img src="~/assets/star.svg" class="_icon" alt="">
+               <img src="~/assets/star.svg" class="_icon" alt="">
+               <img src="~/assets/star.svg" class="_icon" alt="">
+            </span>
+         </div>
+         <span class="ms-5 text-muted"> @rateSum.First(p=>p.RATE_AT == 5).TOTAL lượt </span>
+      </div>
+      <div class="d-flex mt-1">
+         <div class="d-flex align-items-center">
+            <span class="fs16" _used-icon="1">
+               <img src="~/assets/star.svg" class="_icon" alt="">
+               <img src="~/assets/star.svg" class="_icon" alt="">
+               <img src="~/assets/star.svg" class="_icon" alt="">
+               <img src="~/assets/star.svg" class="_icon" alt="">
+               <img src="~/assets/star faded.svg" class="_icon" alt="">
+            </span>
+         </div>
+         <span class="ms-5 text-muted"> @rateSum.First(p => p.RATE_AT == 4).TOTAL lượt </span>
+      </div>
+      <div class="d-flex mt-1">
+         <div class="d-flex align-items-center">
+            <span class="fs16" _used-icon="1">
+               <img src="~/assets/star.svg" class="_icon" alt="">
+               <img src="~/assets/star.svg" class="_icon" alt="">
+               <img src="~/assets/star.svg" class="_icon" alt="">
+               <img src="~/assets/star faded.svg" class="_icon" alt="">
+               <img src="~/assets/star faded.svg" class="_icon" alt="">
+            </span>
+         </div>
+         <span class="ms-5 text-muted"> @rateSum.First(p => p.RATE_AT == 3).TOTAL lượt </span>
+      </div>
+      <div class="d-flex mt-1">
+         <div class="d-flex align-items-center">
+            <span class="fs16" _used-icon="1">
+               <img src="~/assets/star.svg" class="_icon" alt="">
+               <img src="~/assets/star.svg" class="_icon" alt="">
+               <img src="~/assets/star faded.svg" class="_icon" alt="">
+               <img src="~/assets/star faded.svg" class="_icon" alt="">
+               <img src="~/assets/star faded.svg" class="_icon" alt="">
+            </span>
+         </div>
+         <span class="ms-5 text-muted"> @rateSum.First(p => p.RATE_AT == 2).TOTAL lượt </span>
+      </div>
+      <div class="d-flex mt-1">
+         <div class="d-flex align-items-center">
+            <span class="fs16" _used-icon="1">
+               <img src="~/assets/star.svg" class="_icon" alt="">
+               <img src="~/assets/star faded.svg" class="_icon" alt="">
+               <img src="~/assets/star faded.svg" class="_icon" alt="">
+               <img src="~/assets/star faded.svg" class="_icon" alt="">
+               <img src="~/assets/star faded.svg" class="_icon" alt="">
+            </span>
+         </div>
+         <span class="ms-5 text-muted"> @rateSum.First(p => p.RATE_AT == 1).TOTAL lượt </span>
+      </div>
+   </div>
+
+   <div>
+      <!-- your review -->
+      <div class="_bg-white rounded box-p-2 d-flex flex-column" style="width:800px;">
+         <h5 class="mb-4"> Nhận xét của bạn:</h5>
+
+         <div id="userRate" class="d-flex align-items-center">
+
+            <span class="me-3">Đánh giá sản phẩm: </span>
+
+            <label class="me-3" _used-icon="1.5">
+               <input class="me-2" type="radio" name="rate" value="5" checked /> 5 sao
+            </label>
+            <label class="me-3" _used-icon="1.5">
+               <input class="me-2" type="radio" name="rate" value="4" /> 4 sao
+            </label>
+            <label class="me-3" _used-icon="1.5">
+               <input class="me-2" type="radio" name="rate" value="3" /> 3 sao
+            </label>
+            <label class="me-3" _used-icon="1.5">
+               <input class="me-2" type="radio" name="rate" value="2" /> 2 sao
+            </label>
+            <label class="me-3" _used-icon="1.5">
+               <input class="me-2" type="radio" name="rate" value="1" /> 1 sao
+            </label>
+         </div>
+
+         <textarea id="userComment" class="d-block border rounded p-3 w-75 my-3" rows="3" style="resize:vertical;"></textarea>
+
+         <button class="btn btn-primary rounded-0 me-auto fw4" onclick="postReview()"> Đăng nhận xét </button>
+
+      </div>
+
+      <h4 class="box-mb-1 box-mt-2 uppercase fs20"> đánh giá từ khách hàng </h4>
+      <!-- filter -->
+      <div id="comment-filter" class="_bg-white rounded box-px-2 box-py-1 box-mt-1" style="width:800px;">
+         <span class="me-3"> Lọc theo: </span>
+         <span class="filter-item btn border mx-1 active clickable" value="5" onclick="setCommentRateAt(this)"> 5 sao </span>
+         <span class="filter-item btn border bg-light mx-1 clickable" value="4" onclick="setCommentRateAt(this)"> 4 sao</span>
+         <span class="filter-item btn border bg-light mx-1 clickable" value="3" onclick="setCommentRateAt(this)"> 3 sao</span>
+         <span class="filter-item btn border bg-light mx-1 clickable" value="2" onclick="setCommentRateAt(this)"> 2 sao</span>
+         <span class="filter-item btn border bg-light mx-1 clickable" value="1" onclick="setCommentRateAt(this)"> 1 sao</span>
+      </div>
+
+
+      <!-- all comments -->
+      <div id="product-reviews" class="_bg-white rounded box-p-2 box-py-1 box-mt-1" style="width:800px;">
+
+         @await Component.InvokeAsync("ProductComment", new
+         {
+            productId = ViewBag.Product.ID.ToString()
+         })
+
+         <div id="load-comment-btn" class="d-flex flex-center  border-top pt-3">
+            <button class="btn btn-lg rounded-0" onclick="loadComment()"> Xem thêm </button>
+         </div>
+      </div>
+
+   </div>
+
+</div>
+
+@section Scripts
+{
+   <script>
+      const PRODUCT = @Html.Raw(JsonConvert.SerializeObject(product));
+
+      var totalComment = @Html.Raw(""+rateSum.Count());
+
+      var rateAt = 5;
+
+      function loadComment() {
+         $.post('/Shop/LoadComment', {
+            productId: PRODUCT.ID,
+            totalComment,
+            rateAt
+         }, function (result) {
+               if (result.success) {
+                  totalComment += result.totalComment;
+
+                  var html = "";
+                  for (var i = 0; i < result.comments.length; i++) {
+                     html += `
+                     <div class="product-comment mb-4">
+                        <span class="fw5 fs18 mb-2"> ${ result.comments[i].author??"Chưa đăng ký" }  </span>
+                        <span class="ms-3 text-muted"> Đánh giá: <b> ${result.comments[i].rate} sao</b></span>
+                        <p class="bg-light p-3 mt-2 fw3"> ${result.comments[i].commented??""} </p>
+                     </div>`;
+                  }
+                  $('#load-comment-btn').before(html);
+            }
+         });
+      }
+
+      function setCommentRateAt(el, val) {
+         if (!rateAt)
+            rateAt = 5;
+         if (rateAt == $(el).attr('value') || rateAt == val)
+            return;
+
+         if (el) {
+            rateAt = $(el).attr('value');
+         }
+         else {
+            rateAt = val;
+         }
+
+         totalComment = 0;
+         $('.product-comment').remove();
+         loadComment();
+
+         //update ui
+         $('#comment-filter .filter-item.active').removeClass('active');
+         $(`#comment-filter .filter-item[value="${rateAt}"]`).addClass('active');
+      }
+
+      function selectImage(index) {
+         $('#thumbnail-img').attr('src', PRODUCT.ProductImages[index].MEDIUM_URL);
+      }
+
+
+
+      function postReview() {
+
+         var rate = $('#userRate input:checked').val();
+         var commented = $('textarea#userComment').val();
+
+         $.post('/Shop/PostReview', {
+            productId: PRODUCT.ID,
+            commented,
+            rate
+         }, function (result) {
+               if (result.success) {
+                  setCommentRateAt(null, rate);
+
+                  $('#product-reviews').prepend(`
+                  <div class="product-comment mb-4">
+                     <span class="fw5 fs18 mb-2"> ${result.author}  </span>
+                     <span class="ms-3 text-muted"> Đánh giá: <b> ${rate} sao</b></span>
+                     <p class="p-3 mt-2 fw3" style="background-color:#f0f9ff"> ${commented} </p>
+                  </div>`);
+               }
+         });
+      }
+
+   </script>
+   <script>
+      var swipers = {};
+      swipers.similarProduct = new Swiper('#similar-products.swiper-container', {
+         direction: 'horizontal',
+         slidesPerView: 5,
+      });
+   </script>
+} 
